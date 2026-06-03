@@ -42,8 +42,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run Note Generator
-        id: note_gen
+      - name: Generate and Commit Note 1
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
@@ -54,23 +53,67 @@ jobs:
           fi
           python generate_note.py $FORCE_FLAG
 
-      - name: Commit and Push Changes
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          # Stage notes directory and topics file (in case topics file changes or is updated)
+          git config --local user.email "Codewithabhijitsahoo@users.noreply.github.com"
+          git config --local user.name "Codewithabhijitsahoo"
           git add notes/
           
-          # Check if there are changes staged for commit
           if git diff --cached --quiet; then
-            echo "No changes detected. Skipping git push."
+            echo "No new changes for Note 1."
           else
-            git commit -m "docs: Auto-generate daily learning note"
-            
-            # Rebase to prevent push conflicts
+            git commit -m "docs: Auto-generate daily learning note (Part 1)"
             git pull --rebase origin main || git pull --rebase origin master
-            
-            # Push changes back to the origin
+            git push origin HEAD
+          fi
+
+      - name: Generate and Commit Note 2
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
+        run: |
+          # Wait 10 seconds to avoid rapid consecutive requests
+          sleep 10
+          
+          # Force is only used for manual runs, but for Note 2 we always force if manual force was set
+          FORCE_FLAG=""
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            FORCE_FLAG="--force"
+          fi
+          python generate_note.py $FORCE_FLAG
+
+          git config --local user.email "Codewithabhijitsahoo@users.noreply.github.com"
+          git config --local user.name "Codewithabhijitsahoo"
+          git add notes/
+          
+          if git diff --cached --quiet; then
+            echo "No new changes for Note 2."
+          else
+            git commit -m "docs: Auto-generate daily learning note (Part 2)"
+            git pull --rebase origin main || git pull --rebase origin master
+            git push origin HEAD
+          fi
+
+      - name: Generate and Commit Note 3
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
+        run: |
+          # Wait 10 seconds to avoid rapid consecutive requests
+          sleep 10
+          
+          FORCE_FLAG=""
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            FORCE_FLAG="--force"
+          fi
+          python generate_note.py $FORCE_FLAG
+
+          git config --local user.email "Codewithabhijitsahoo@users.noreply.github.com"
+          git config --local user.name "Codewithabhijitsahoo"
+          git add notes/
+          
+          if git diff --cached --quiet; then
+            echo "No new changes for Note 3."
+          else
+            git commit -m "docs: Auto-generate daily learning note (Part 3)"
+            git pull --rebase origin main || git pull --rebase origin master
             git push origin HEAD
           fi
