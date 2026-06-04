@@ -365,6 +365,12 @@ def main() -> None:
         help="Generate a new note even if one was already generated today."
     )
     parser.add_argument(
+        "--max-per-day",
+        type=int,
+        default=3,
+        help="Maximum number of notes to generate per day (default: 3)"
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Find the next topic and print it, but do not call the API or write any files."
@@ -378,12 +384,12 @@ def main() -> None:
 
     logger.info("Starting Daily Note Generator...")
     
-    # 1. Check if a note has already been generated today (to avoid accidental duplicates)
+    # 1. Check if the limit of daily notes has already been reached (to avoid accidental duplicates/excess runs)
     today_str = datetime.date.today().strftime("%Y-%m-%d")
     if not args.force and not args.dry_run:
         today_notes = list(notes_path.glob(f"{today_str}-*.md"))
-        if today_notes:
-            logger.info(f"A note has already been generated today: {today_notes[0].name}")
+        if len(today_notes) >= args.max_per_day:
+            logger.info(f"Already generated {len(today_notes)} note(s) today (limit: {args.max_per_day}).")
             logger.info("Use --force to override this and generate another note.")
             sys.exit(0)
             
