@@ -14,7 +14,7 @@ K-Nearest Neighbors (KNN) Regressor
 Decision Trees
 Random Forest Classifier
 Random Forest Regressor
-Gradient Boosting Machines (GBM)
+Gradient Boosting Machines
 XGBoost
 LightGBM
 CatBoost
