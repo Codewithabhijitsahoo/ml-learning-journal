@@ -129,13 +129,13 @@ def generate_note_content(topic: str, model_name: str = "gemini-2.5-flash") -> s
         ValueError: If the API returns an empty response.
         Exception: For API errors or connection failures.
     """
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
+    api_key_env = os.environ.get("GEMINI_API_KEY")
+    if not api_key_env:
         logger.error("GEMINI_API_KEY environment variable is not set.")
         raise ValueError("GEMINI_API_KEY environment variable is not set.")
 
-    # Initialize Client. It automatically loads GEMINI_API_KEY from environment.
-    client = genai.Client(api_key=api_key)
+    # Support multiple comma-separated keys for rate-limiting rotation
+    api_keys = [k.strip() for k in api_key_env.split(",") if k.strip()]
 
     system_instruction = (
         "You are an expert AI and Machine Learning educator. Your goal is to write a highly detailed, "
@@ -241,6 +241,9 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
     response = None
 
     for attempt in range(1, max_retries + 1):
+        # Rotate API key based on the attempt number
+        current_key = api_keys[(attempt - 1) % len(api_keys)]
+        
         # Switch to fallback prompt (retrieving less content) on attempt 3 or later to avoid token/rate limits
         current_prompt = prompt if attempt < 3 else fallback_prompt
         if attempt >= 3:
@@ -253,6 +256,8 @@ Ensure that all sections are concise and informative. Do not wrap the entire out
                 f"Sending request to Gemini API for topic: '{topic}' "
                 f"using model: '{model_name}' (Attempt {attempt}/{max_retries})..."
             )
+            # Initialize Client dynamically with the rotated key
+            client = genai.Client(api_key=current_key)
             response = client.models.generate_content(
                 model=model_name,
                 contents=current_prompt,
