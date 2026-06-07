@@ -194,11 +194,60 @@ List at least 3 high-quality learning resources, research papers, or documentati
 Ensure that all sections are highly detailed, informative, and free of placeholder text. Do not wrap the entire output in ```markdown ... ```. Output raw markdown.
 """
 
-    max_retries = 5
-    base_delay = 2.0  # seconds
+    fallback_prompt = f"""
+Write a concise study note on the topic: "{topic}".
+The output must strictly be in markdown format and contain the following exact headers and structure:
+
+# {topic}
+
+## Overview
+Provide a clear, high-level introduction to {topic}.
+
+## What Problem It Solves
+Explain the core problems that {topic} addresses.
+
+## How It Works
+Detail the mechanism of {topic} in simple terms.
+
+## Mathematical Intuition
+Briefly explain the key mathematical concepts and logic behind {topic} using LaTeX.
+
+## Advantages
+List the main advantages of using {topic}.
+
+## Disadvantages
+List the key limitations of {topic}.
+
+## Real World Applications
+Provide 2-3 real-world use cases where {topic} is applied.
+
+## Python Example
+Provide a short, standalone Python code snippet demonstrating {topic}.
+
+## Interview Questions
+Provide a list of 3 key technical interview questions about {topic}, with answers.
+
+## Quiz
+Provide a multiple-choice quiz with 2 conceptual questions, with answers.
+
+## Further Reading
+List 2-3 learning resources or documentation links.
+
+Ensure that all sections are concise and informative. Do not wrap the entire output in ```markdown ... ```. Output raw markdown.
+"""
+
+    max_retries = 6
+    base_delay = 5.0  # seconds
     response = None
 
     for attempt in range(1, max_retries + 1):
+        # Switch to fallback prompt (retrieving less content) on attempt 3 or later to avoid token/rate limits
+        current_prompt = prompt if attempt < 3 else fallback_prompt
+        if attempt >= 3:
+            logger.warning(
+                f"Attempt {attempt}: Switching to simplified/concise fallback prompt (retrieving less content) "
+                f"to resolve or avoid API quota/rate limit issues."
+            )
         try:
             logger.info(
                 f"Sending request to Gemini API for topic: '{topic}' "
@@ -206,7 +255,7 @@ Ensure that all sections are highly detailed, informative, and free of placehold
             )
             response = client.models.generate_content(
                 model=model_name,
-                contents=prompt,
+                contents=current_prompt,
                 config=types.GenerateContentConfig(
                     system_instruction=system_instruction,
                     temperature=0.2,  # Lower temperature for educational accuracy
