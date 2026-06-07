@@ -73,12 +73,12 @@ jobs:
             echo "No new changes for Note 1."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 1)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge as fallback
+            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
             BRANCH="main"
             git show-ref --quiet refs/heads/master && BRANCH="master"
             if ! git pull --rebase origin $BRANCH; then
               git rebase --abort 2>/dev/null || true
-              git pull --no-rebase origin $BRANCH
+              git pull --no-rebase -X ours origin $BRANCH
             fi
             git push origin HEAD
           fi
@@ -107,12 +107,12 @@ jobs:
             echo "No new changes for Note 2."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 2)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge as fallback
+            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
             BRANCH="main"
             git show-ref --quiet refs/heads/master && BRANCH="master"
             if ! git pull --rebase origin $BRANCH; then
               git rebase --abort 2>/dev/null || true
-              git pull --no-rebase origin $BRANCH
+              git pull --no-rebase -X ours origin $BRANCH
             fi
             git push origin HEAD
           fi
@@ -140,12 +140,12 @@ jobs:
             echo "No new changes for Note 3."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 3)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge as fallback
+            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
             BRANCH="main"
             git show-ref --quiet refs/heads/master && BRANCH="master"
             if ! git pull --rebase origin $BRANCH; then
               git rebase --abort 2>/dev/null || true
-              git pull --no-rebase origin $BRANCH
+              git pull --no-rebase -X ours origin $BRANCH
             fi
             git push origin HEAD
           fi
@@ -173,12 +173,12 @@ jobs:
             echo "No new changes for Note 4."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 4)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge as fallback
+            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
             BRANCH="main"
             git show-ref --quiet refs/heads/master && BRANCH="master"
             if ! git pull --rebase origin $BRANCH; then
               git rebase --abort 2>/dev/null || true
-              git pull --no-rebase origin $BRANCH
+              git pull --no-rebase -X ours origin $BRANCH
             fi
             git push origin HEAD
           fi
@@ -206,12 +206,12 @@ jobs:
             echo "No new changes for Note 5."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 5)"
-            # Pull changes with rebase, aborting if conflicts occur and using merge as fallback
+            # Pull changes with rebase, aborting if conflicts occur and using merge ours strategy as fallback
             BRANCH="main"
             git show-ref --quiet refs/heads/master && BRANCH="master"
             if ! git pull --rebase origin $BRANCH; then
               git rebase --abort 2>/dev/null || true
-              git pull --no-rebase origin $BRANCH
+              git pull --no-rebase -X ours origin $BRANCH
             fi
             git push origin HEAD
           fi
