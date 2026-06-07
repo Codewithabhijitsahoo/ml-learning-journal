@@ -17,6 +17,10 @@ on:
         type: string
         default: 'gemini-2.5-flash'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -43,6 +47,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Generate and Commit Note 1
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
@@ -61,11 +66,15 @@ jobs:
             echo "No new changes for Note 1."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 1)"
-            git pull --rebase origin main || git pull --rebase origin master
+            if ! git pull --rebase origin main 2>/dev/null && ! git pull --rebase origin master 2>/dev/null; then
+              git rebase --abort 2>/dev/null || true
+              git pull --no-rebase origin main || git pull --no-rebase origin master
+            fi
             git push origin HEAD
           fi
 
       - name: Generate and Commit Note 2
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
@@ -88,11 +97,15 @@ jobs:
             echo "No new changes for Note 2."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 2)"
-            git pull --rebase origin main || git pull --rebase origin master
+            if ! git pull --rebase origin main 2>/dev/null && ! git pull --rebase origin master 2>/dev/null; then
+              git rebase --abort 2>/dev/null || true
+              git pull --no-rebase origin main || git pull --no-rebase origin master
+            fi
             git push origin HEAD
           fi
 
       - name: Generate and Commit Note 3
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
@@ -114,11 +127,15 @@ jobs:
             echo "No new changes for Note 3."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 3)"
-            git pull --rebase origin main || git pull --rebase origin master
+            if ! git pull --rebase origin main 2>/dev/null && ! git pull --rebase origin master 2>/dev/null; then
+              git rebase --abort 2>/dev/null || true
+              git pull --no-rebase origin main || git pull --no-rebase origin master
+            fi
             git push origin HEAD
           fi
 
       - name: Generate and Commit Note 4
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
@@ -140,11 +157,15 @@ jobs:
             echo "No new changes for Note 4."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 4)"
-            git pull --rebase origin main || git pull --rebase origin master
+            if ! git pull --rebase origin main 2>/dev/null && ! git pull --rebase origin master 2>/dev/null; then
+              git rebase --abort 2>/dev/null || true
+              git pull --no-rebase origin main || git pull --no-rebase origin master
+            fi
             git push origin HEAD
           fi
 
       - name: Generate and Commit Note 5
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ github.event.inputs.model || 'gemini-2.5-flash' }}
@@ -166,6 +187,9 @@ jobs:
             echo "No new changes for Note 5."
           else
             git commit -m "docs: Auto-generate daily learning note (Part 5)"
-            git pull --rebase origin main || git pull --rebase origin master
+            if ! git pull --rebase origin main 2>/dev/null && ! git pull --rebase origin master 2>/dev/null; then
+              git rebase --abort 2>/dev/null || true
+              git pull --no-rebase origin main || git pull --no-rebase origin master
+            fi
             git push origin HEAD
           fi
