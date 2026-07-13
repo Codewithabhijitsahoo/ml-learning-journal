@@ -37,8 +37,8 @@ jobs:
 
       - name: Sync to Latest Remote State (Prevents Re-run Conflicts)
         run: |
-          git config --local user.email "Codewithabhijitsahoo@users.noreply.github.com"
-          git config --local user.name "Codewithabhijitsahoo"
+          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
+          git config --local user.name "AbhijitSahoo07"
           git checkout main || git checkout master || true
           git pull origin main || git pull origin master || echo "No remote changes to sync"
 
@@ -65,8 +65,8 @@ jobs:
           fi
           python generate_note.py $FORCE_FLAG
 
-          git config --local user.email "Codewithabhijitsahoo@users.noreply.github.com"
-          git config --local user.name "Codewithabhijitsahoo"
+          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
+          git config --local user.name "AbhijitSahoo07"
           git add notes/
           
           if git diff --cached --quiet; then
@@ -99,8 +99,8 @@ jobs:
           fi
           python generate_note.py $FORCE_FLAG
 
-          git config --local user.email "Codewithabhijitsahoo@users.noreply.github.com"
-          git config --local user.name "Codewithabhijitsahoo"
+          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
+          git config --local user.name "AbhijitSahoo07"
           git add notes/
           
           if git diff --cached --quiet; then
@@ -132,8 +132,8 @@ jobs:
           fi
           python generate_note.py $FORCE_FLAG
 
-          git config --local user.email "Codewithabhijitsahoo@users.noreply.github.com"
-          git config --local user.name "Codewithabhijitsahoo"
+          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
+          git config --local user.name "AbhijitSahoo07"
           git add notes/
           
           if git diff --cached --quiet; then
@@ -165,8 +165,8 @@ jobs:
           fi
           python generate_note.py $FORCE_FLAG
 
-          git config --local user.email "Codewithabhijitsahoo@users.noreply.github.com"
-          git config --local user.name "Codewithabhijitsahoo"
+          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
+          git config --local user.name "AbhijitSahoo07"
           git add notes/
           
           if git diff --cached --quiet; then
@@ -198,8 +198,8 @@ jobs:
           fi
           python generate_note.py $FORCE_FLAG
 
-          git config --local user.email "Codewithabhijitsahoo@users.noreply.github.com"
-          git config --local user.name "Codewithabhijitsahoo"
+          git config --local user.email "187935020+AbhijitSahoo07@users.noreply.github.com"
+          git config --local user.name "AbhijitSahoo07"
           git add notes/
           
           if git diff --cached --quiet; then
